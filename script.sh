@@ -44,33 +44,47 @@ else
 fi
 
 #Criando docker
-docker --version
+
+#Criando jar executável
+#cd Desktop
+#git clone https://github.com/Gerencie-Monitoramento-de-totens/JAR.git
+#cd JAR/gerencie/target
+#java -jar gerencie-1.0-SNAPSHOT.jar
+
+
 if [ $? -eq 0 ];
 then
-	echo "Docker já está instalado"
-else
-	echo "Gostaria de instalar o Docker e Banco Gerencie! ? (s/n)"
+	echo "Arquivo .jar não instalado!"
+	echo "Gostaria de instalar arquivo .jar Gerencie! ? (s/n)"
 	read inst
 	if [ \"$inst\" == \"s\" ];
 	then
-		sudo apt install docker.io -y
-
-		echo "Iniciando Docker"
-		echo "Caminho: "
-		pwd
-		sudo systemctl start docker
-		sudo systemctl enable docker
-		sudo docker pull mysql:5.7
-		sudo docker images
-		sudo docker run -d -p 3306:3306 --name ContainerBD -e "MYSQL_DATABASE=gerencie" -e "MYSQL_ROOT_PASSWORD=urubu100" mysql:5.7
-
-		echo Banco de dados Criado com Sucesso!
+		cd /home/ubuntu/Desktop
+		git clone https://github.com/Gerencie-Monitoramento-de-totens/JAR.git
+		echo "Arquivo clonado com sucesso!"
+		echo "Executando arquivo"
+		cd JAR/gerencie/target
+		java -jar gerencie-1.0-SNAPSHOT-jar-with-dependencies.jar
 	fi
+else
+	echo "Arquivo .jar já adquirido!"
+	echo "Gostaria de remover o arquivo .jar? (s/n)"
+	read inst
+	if [ \"$inst\" == \"s\" ];
+	then
+		echo "Removendo arquivo"
+		cd /home/ubuntu/Desktop
+		sudo rm -r "JAR"
+	fi
+	echo "Gostaria de reinstalar arquivo .jar Gerencie! ? (s/n)"
+		read inst
+		if [ \"$inst\" == \"s\" ];
+		then
+			cd /home/ubuntu/Desktop
+			git clone https://github.com/Gerencie-Monitoramento-de-totens/JAR.git
+			echo "Arquivo clonado com sucesso!"
+			echo "Executando arquivo"
+			cd JAR/gerencie/target
+			java -jar gerencie-1.0-SNAPSHOT-jar-with-dependencies.jar
+		fi
 fi
-
-#Criando jar executável
-git clone https://github.com/Gerencie-Monitoramento-de-totens/JAR.git
-cd JAR/gerencie/target
-java -jar gerencie-1.0-SNAPSHOT.jar
-
-
