@@ -13,6 +13,7 @@ echo "Você gostaria de instalar a interface gráfica? (s/n)"
 read inst
 if [ \"$inst\" == \"s\" ];
 then
+		cd 
 		sudo apt-get install xrdp lxde-core lxde tigervnc-standalone-server -y
 else
 		echo "Prosseguindo..."
