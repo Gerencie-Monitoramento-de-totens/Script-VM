@@ -13,22 +13,11 @@ echo "Você gostaria de instalar a interface gráfica? (s/n)"
 read inst
 if [ \"$inst\" == \"s\" ];
 then
-		cd 
 		sudo apt-get install xrdp lxde-core lxde tigervnc-standalone-server -y
 else
 		echo "Prosseguindo..."
 fi
 
-#saber versão java
-# VERSION=”$(java -version 2>&1 | grep version | cut -d’”’ -f2)”
-# if [ “${VERSION}” ];
-# then
-#   echo “Cliente possui java instalado: ${VERSION}”
-# else
-#   echo “Cliente não possui java instalado”
-# fi
-
-#instalação java default
 java --version
 if [ $? -eq 0 ];
 then
@@ -44,48 +33,44 @@ else
 	fi
 fi
 
+
 #Criando docker
+sudo apt install docker.io
+sudo systemctl start docker
+sudo systemctl enable docker
+# sudo docker –-version
+sudo docker ps
+# Pull ele está baixando o MYSQL.
+sudo docker pull mysql:5.7
+sudo docker images
+# Ele cria as configurações do mysql..
+# Caso não consiga executar o banco pelo java descomentar linha abaixo.
+sudo docker run -d -p 3306:3306 --name ContainerBD -e "MYSQL_DATABASE=gerencie" -e "MYSQL_ROOT_PASSWORD=urubu100" mysql:5.7
+
 
 #Criando jar executável
-#cd Desktop
-#git clone https://github.com/Gerencie-Monitoramento-de-totens/JAR.git
-#cd JAR/gerencie/target
-#java -jar gerencie-1.0-SNAPSHOT.jar
-
-
+java -version
 if [ $? -eq 0 ];
-then
-	echo "Arquivo .jar não instalado!"
-	echo "Gostaria de instalar arquivo .jar Gerencie! ? (s/n)"
-	read inst
-	if [ \"$inst\" == \"s\" ];
 	then
-		cd /home/ubuntu/Desktop
-		git clone https://github.com/Gerencie-Monitoramento-de-totens/JAR.git
-		echo "Arquivo clonado com sucesso!"
-		echo "Executando arquivo"
-		cd JAR/gerencie/target
-		java -jar gerencie-1.0-SNAPSHOT-jar-with-dependencies.jar
-	fi
+	echo "java instalado"
+	sudo apt install default-jre -y
+		sleep 3
+	git clone https://github.com/GabrielaKubo/SCRIPT-GUI.git
+	git clone https://github.com/GabrielaKubo/SCRIPT-CLI.git
+
+	sudo docker build -t dockerfile .
+	sudo docker run -d -t --rm --name containerjava dockerfile
 else
-	echo "Arquivo .jar já adquirido!"
-	echo "Gostaria de remover o arquivo .jar? (s/n)"
+	echo "java nao instalado"
+	echo "gostaria de instalar o java em sua Máquina Virtual? (s/n)"
 	read inst
 	if [ \"$inst\" == \"s\" ];
-	then
-		echo "Removendo arquivo"
-		cd /home/ubuntu/Desktop
-		sudo rm -r "JAR"
-	fi
-	echo "Gostaria de reinstalar arquivo .jar Gerencie! ? (s/n)"
-		read inst
-		if [ \"$inst\" == \"s\" ];
 		then
-			cd /home/ubuntu/Desktop
-			git clone https://github.com/Gerencie-Monitoramento-de-totens/JAR.git
-			echo "Arquivo clonado com sucesso!"
-			echo "Executando arquivo"
-			cd JAR/gerencie/target
-			java -jar gerencie-1.0-SNAPSHOT-jar-with-dependencies.jar
-		fi
+			sudo apt install default-jre -y
+			git clone https://github.com/GabrielaKubo/SCRIPT-GUI.git
+			git clone https://github.com/GabrielaKubo/SCRIPT-CLI.git
+
+			sudo docker build -t dockerfile .
+			sudo docker run -d -t --name containerjava dockerfile
+	fi
 fi
